@@ -6,6 +6,7 @@ import {
   RunInputs,
   RunOutputs,
 } from "../../schema/index.js";
+import { Serialized } from "../../schema/load.js";
 import { BaseCallbackHandler, BaseCallbackHandlerInput } from "../base.js";
 
 export type RunType = "llm" | "chain" | "tool";
@@ -89,7 +90,7 @@ export abstract class BaseTracer extends BaseCallbackHandler {
   }
 
   async handleLLMStart(
-    llm: { name: string },
+    llm: Serialized,
     prompts: string[],
     runId: string,
     parentRunId?: string,
@@ -98,7 +99,7 @@ export abstract class BaseTracer extends BaseCallbackHandler {
     const execution_order = this._getExecutionOrder(parentRunId);
     const run: Run = {
       id: runId,
-      name: llm.name,
+      name: llm.id[llm.id.length - 1],
       parent_run_id: parentRunId,
       start_time: Date.now(),
       end_time: 0,
@@ -116,7 +117,7 @@ export abstract class BaseTracer extends BaseCallbackHandler {
   }
 
   async handleChatModelStart(
-    llm: { name: string },
+    llm: Serialized,
     messages: BaseChatMessage[][],
     runId: string,
     parentRunId?: string,
@@ -125,7 +126,7 @@ export abstract class BaseTracer extends BaseCallbackHandler {
     const execution_order = this._getExecutionOrder(parentRunId);
     const run: Run = {
       id: runId,
-      name: llm.name,
+      name: llm.id[llm.id.length - 1],
       parent_run_id: parentRunId,
       start_time: Date.now(),
       end_time: 0,
@@ -165,7 +166,7 @@ export abstract class BaseTracer extends BaseCallbackHandler {
   }
 
   async handleChainStart(
-    chain: { name: string },
+    chain: Serialized,
     inputs: ChainValues,
     runId: string,
     parentRunId?: string
@@ -173,7 +174,7 @@ export abstract class BaseTracer extends BaseCallbackHandler {
     const execution_order = this._getExecutionOrder(parentRunId);
     const run: Run = {
       id: runId,
-      name: chain.name,
+      name: chain.id[chain.id.length - 1],
       parent_run_id: parentRunId,
       start_time: Date.now(),
       end_time: 0,
@@ -212,7 +213,7 @@ export abstract class BaseTracer extends BaseCallbackHandler {
   }
 
   async handleToolStart(
-    tool: { name: string },
+    tool: Serialized,
     input: string,
     runId: string,
     parentRunId?: string
@@ -220,7 +221,7 @@ export abstract class BaseTracer extends BaseCallbackHandler {
     const execution_order = this._getExecutionOrder(parentRunId);
     const run: Run = {
       id: runId,
-      name: tool.name,
+      name: tool.id[tool.id.length - 1],
       parent_run_id: parentRunId,
       start_time: Date.now(),
       end_time: 0,
