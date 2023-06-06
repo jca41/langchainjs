@@ -91,6 +91,8 @@ export abstract class BaseMessageStringPromptTemplate extends BaseMessagePromptT
 }
 
 export abstract class BaseChatPromptTemplate extends BasePromptTemplate {
+  declare PromptValueReturnType: ChatPromptValue;
+
   constructor(input: BasePromptTemplateInput) {
     super(input);
   }
@@ -101,7 +103,7 @@ export abstract class BaseChatPromptTemplate extends BasePromptTemplate {
     return (await this.formatPromptValue(values)).toString();
   }
 
-  async formatPromptValue(values: InputValues): Promise<BasePromptValue> {
+  async formatPromptValue(values: InputValues): Promise<ChatPromptValue> {
     const resultMessages = await this.formatMessages(values);
     return new ChatPromptValue(resultMessages);
   }

@@ -54,6 +54,8 @@ export abstract class BasePromptTemplate
   extends Serializable
   implements BasePromptTemplateInput
 {
+  declare PromptValueReturnType: BasePromptValue;
+  
   lc_namespace = ["langchain", "prompts", this._getPromptType()];
 
   inputVariables: string[];
